@@ -3,7 +3,7 @@
 library(dplyr)
 
 # Read data
-elf_data <- read.delim("01_dec_data.txt", blank.lines.skip = FALSE) %>% 
+elf_data <- read.delim("data/01_dec_data.txt", blank.lines.skip = FALSE) %>% 
   rename(calories = X6110)
 
 # Elf id function
