@@ -17,6 +17,8 @@ for (i in 1:nrow(elf_data)) {
   count <- if_else(is.na(elf_data$calories[[i]]), count + 1, count)
 }
 
+rm(count, i)
+
 # Sum calories per elf
 elf_data_calories <- elf_data %>% 
   group_by(elf_id) %>% 
