@@ -1,10 +1,12 @@
 # December 01 - Advent of Code 2022 ---------------------------------------
-#Initiate
+
+# Initiate
 library(dplyr)
 
+# Part 1 ------------------------------------------------------------------
+
 # Read data
-elf_data <- read.delim("data/01_dec_data.txt", blank.lines.skip = FALSE) %>% 
-  rename(calories = X6110)
+elf_data <- read.delim("data/01_dec_data.txt", blank.lines.skip = FALSE)
 
 # Elf id function
 elf_data <- elf_data %>% 
@@ -25,5 +27,13 @@ elf_data_calories <- elf_data %>%
   summarise(total_calories = sum(calories, na.rm = TRUE)) %>% 
   arrange(desc(total_calories))
 
-# How much calories does the elf carrying the most calories have?
+# Find the Elf carrying the most Calories. How many total Calories is that Elf carrying?
 elf_data_calories[[2:1]]
+
+
+# Part 2 ------------------------------------------------------------------
+
+# Find the top three Elves carrying the most Calories. How many Calories are those Elves carrying in total?
+elf_data_calories %>% 
+head(3) %>% 
+  summarise(total_calories = sum(total_calories))
