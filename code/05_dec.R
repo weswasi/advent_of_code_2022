@@ -81,3 +81,46 @@ for (i in 2:9){
 # After the rearrangement procedure completes, what crate ends up on top of each stack?
 crate_1 %>% 
   unite(crates, 1:ncol(crate_1), sep="")
+
+
+# Part 2 ------------------------------------------------------------------
+
+# From columns to dataframes
+df_list <- lapply(1:9, function(i) data.frame(crates[i]))
+df_list <- lapply(df_list, function(i) i[!is.na(i)])
+df_list <- lapply(df_list, function(i) data.frame(i))
+names(df_list) <- paste0("crate_", seq(1:9))
+list2env(df_list,envir=.GlobalEnv)
+rm(df_list)
+
+# Rearange crates
+for (i in 1:nrow(moves)){
+  from <- as.numeric(moves$from[i])
+  to <- as.numeric(moves$to[i])
+  move <- as.numeric(moves$move[i])
+  keep_from <- move + 1
+  
+  temp_df <- get(paste0("crate_", from)) %>% 
+    head(move)
+  
+  assign(paste0("crate_", to), bind_rows(temp_df, get(paste0("crate_", to))))
+  
+  assign(paste0("crate_", from), get(paste0("crate_", from)) %>% 
+           slice(keep_from:n()))
+}
+
+# Only keep top crate
+for (i in 1:9){
+  assign(paste0("crate_", i), get(paste0("crate_", i)) %>% 
+           slice(1))
+}
+
+# Bind columns
+for (i in 2:9){
+  crate_1 <- crate_1 %>% 
+    bind_cols(get(paste0("crate_", i)))
+}
+
+# After the rearrangement procedure completes, what crate ends up on top of each stack?
+crate_1 %>% 
+  unite(crates, 1:ncol(crate_1), sep="")
