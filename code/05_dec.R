@@ -82,7 +82,6 @@ for (i in 2:9){
 crate_1 %>% 
   unite(crates, 1:ncol(crate_1), sep="")
 
-
 # Part 2 ------------------------------------------------------------------
 
 # From columns to dataframes
