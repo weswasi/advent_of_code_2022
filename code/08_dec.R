@@ -99,25 +99,20 @@ for (i in 2:nrow(trees)) {
   trees_data_long <- bind_rows(trees_data_long, d3)
 }  # End 
 
+# As numeric
 trees_data_long <- trees_data_long %>% 
   mutate_if(is.character, as.numeric) %>% 
   select(-d1)
 
-# Dublicate all columns
-trees_data_visability <- trees_data_long %>% 
-  mutate(
-    across()
-  )
-
-# Dublicate columns again
+# Dublicate columns
 trees_data_scenic_score <- trees_data_long %>% 
   mutate(across())
 
 # Because i need to stop at the edge, give all edges 99
-trees_data_visability$X1 <- 99
-trees_data_visability$X99 <- 99
-trees_data_visability[1, 1:99] <- 99
-trees_data_visability[99, 1:99] <- 99
+trees_data_long$X1 <- 99
+trees_data_long$X99 <- 99
+trees_data_long[1, 1:99] <- 99
+trees_data_long[99, 1:99] <- 99
 
 # All edges has a scenic score of 0
 trees_data_scenic_score$X1 <- 0
@@ -133,13 +128,13 @@ for (i in 2:98) {
     down <- i + 1
     tree <- trees_data_long[i, j]
     
-    left_distance <- which(trees_data_visability[i, 1:left] >= tree) # Find tree rows with same or higher length of index tree
+    left_distance <- which(trees_data_long[i, 1:left] >= tree) # Find tree rows with same or higher length of index tree
     left_distance <- min(abs(left_distance-j)) # Find the nearest tree with same or higher length of index tree
-    right_distance <- which(trees_data_visability[i, right:99] >= tree) # Find tree rows with same or higher length of index tree
+    right_distance <- which(trees_data_long[i, right:99] >= tree) # Find tree rows with same or higher length of index tree
     right_distance <- min(right_distance) # Find the nearest tree with same or higher length of index tree
-    up_distance <- which(trees_data_visability[1:up, j] >= tree) # Find tree rows with same or higher length of index tree
+    up_distance <- which(trees_data_long[1:up, j] >= tree) # Find tree rows with same or higher length of index tree
     up_distance <- min(abs(up_distance-i)) # Find the nearest tree with same or higher length of index tree
-    down_distance <- which(trees_data_visability[down:99, j] >= tree) # Find tree rows with same or higher length of index tree
+    down_distance <- which(trees_data_long[down:99, j] >= tree) # Find tree rows with same or higher length of index tree
     down_distance <- min(down_distance) # Find the nearest tree with same or higher length of index tree
     
     trees_data_scenic_score[[j]][i] <- left_distance*right_distance*up_distance*down_distance
